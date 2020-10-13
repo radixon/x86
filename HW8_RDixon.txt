@@ -1,0 +1,55 @@
+Rozell Dixon
+Digital Design Using Microprocessors
+ENEE 3582
+Homework #8
+
+
+
+
+;------------------------------------------------------------------------------------------------------
+CaseFlip	MACRO	string,		length
+		PUSHAD
+		LOCAL	L1
+		MOV	ECX,	length
+		MOV	SI,	0
+L1:
+		.IF	([string+SI] >= 61h && [string+SI] <= 7Ah)
+			SUB 	[string+SI],	20h
+		.ELSEIF	([string+SI] >= 41h && [string+SI] <= 5Ah)
+			ADD	[string+SI],	20h
+		.ENDIF
+		INC	SI
+		LOOP	L1
+		POPAD
+ENDM
+
+
+
+
+;------------------------------------------------------------------------------------------------------
+int2hex		MACRO	decimal,	hex
+		PUSHAD
+		LOCAL	L1
+		LOCAL	FINISH
+		MOV	AX,		decimal
+		MOV	BX,		16
+		MOV	ESI,		0
+L1:	
+		DIV	BX
+		PUSH	DX
+		MOV	DX,		0
+		CMP	AX,		0
+		JE	FINISH
+		INC	ECX
+		JMP	L1
+FINISH:
+		POP	DX
+		.IF	DX <= 9
+			ADD	DX,	30h
+		.ELSE
+			ADD	DX,	37h
+		.ENDIF
+
+		MOV	[hex+ESI],	DL
+		LOOP	FINISH
+ENDM

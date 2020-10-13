@@ -1,0 +1,50 @@
+;Rozell A. Dixon
+;Digital Design Using Microprocessors
+;ENEE	3582
+;Homework 9.2
+;-----------------------------------------------------------------
+
+.MODEL SMALL
+.386
+.STACK
+
+.DATA
+newline	DB	0Dh, 0Ah
+space	DB	20h
+int1	DD	0
+.CODE
+
+INCLUDE		key.inc
+
+main PROC FAR
+.STARTUP
+
+
+
+		MOV	EBX,	0
+L1:
+		KeyIn
+
+		CMP AL, 1Bh
+		JE EXIT1
+	.IF   (AL>= 30h) &&  (AL <= 39h)
+		MOV	BYTE PTR [int1+EBX], AL
+		INC	EBX
+		JMP SKIPCONV
+	.ELSE
+		JMP	L1
+	.ENDIF
+
+SKIPCONV:
+
+		ECHOES
+		JMP L1
+
+
+EXIT1:
+		str_out	space
+
+
+	.EXIT
+main ENDP
+END
